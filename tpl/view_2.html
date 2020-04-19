@@ -1,0 +1,95 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal" onclick="open_modal()">New
+    Baby</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="babyForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <label for="mother">Mother:</label><br>
+                    <input type="text" id="mother" name="mother" placeholder="Enter mother name"><br>
+                    <label for="bdate">Date:</label><br>
+                    <input type="bdate" id="bdate" name="bdate" required><br>
+                    <label for="time">Time:</label><br>
+                    <input type="number" id="time" name="time" required><br>
+                    <label for="height">Height in cm:</label><br>
+                    <input type="number" id="height" name="height" required minlength="3"><br>
+                    <label for="weight">Weight in grams:</label><br>
+                    <input type="number" id="weight" name="weight" required minlength="3"><br>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Mother</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Height</th>
+            <th scope="col">Weight</th>
+        </tr>
+    </thead>
+    <tbody id="table_content">
+    </tbody>
+</table>
+
+
+<script>
+    function open_modal() {
+        $('#exampleModal').modal('toggle');
+    }
+
+    $("#babyForm").validate({
+        rules: {
+            mother: {
+                required: true,
+                minlength: 3
+            }
+        },
+        messages: {
+            mother: {
+                required: "Molimo vas unesite ime majke!",
+                minlength: "Vase ime mora biti duze od 3"
+            }
+        },
+        submitHandler: function (form) {
+            console.log(form);
+            $("#exampleModal").modal('toggle')
+            alert("Data has been saved");
+        }
+    });
+</script>
+<script>
+    function get_students() {
+        $.get("rest/students", function (data) {    //call rest/students from index.php to get data
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+                html += '<tr> <td>' + data[i].name + '</td>';
+                html += '<td>' + data[i].surname + '</td>';
+                html += '<td>' + data[i].phone_number + '</td>';
+                html += '<td>' + data[i].email + '</td>';
+                html += '<td><button type="button" class="btn btn-danger" onclick="delete_student(' + data[i].id + ');">Delete</button></td> </tr>';
+            }
+            $("#table_content").html(html);
+        });
+    }
+
+</script>
